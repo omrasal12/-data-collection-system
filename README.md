@@ -15,11 +15,14 @@ This project is a complete data collection solution built with three main compon
 │   └── Controllers/
 │       └── HomeController.cs # Receives data from Flutter SDK
 │
+
+
 ├── data_collection1/         # Flutter App
 │   └── lib/
 │       ├── main.dart         # App Entry Point
 │       └── data_collection_sdk.dart  # SDK logic with batching
 │
+
 ├── Sql code.txt              # SQL table & stored procedure
 └── README.md
 
