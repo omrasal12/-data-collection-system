@@ -1,0 +1,61 @@
+create database datalog;
+use datalog;
+
+
+CREATE TABLE sms_events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    event_type VARCHAR(20) NOT NULL,           -- e.g., 'sms'
+    sender VARCHAR(50) NOT NULL,                -- sender phone number
+    message TEXT NOT NULL,                       -- sms body
+    timestamp DATETIME NOT NULL,                 -- when SMS received/sent
+    is_transactional BOOLEAN NOT NULL,           -- transactional or not
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+DELIMITER //
+
+CREATE PROCEDURE sp_insert_sms_event(
+    IN p_event_type VARCHAR(20),
+    IN p_sender VARCHAR(50),
+    IN p_message TEXT,
+    IN p_timestamp DATETIME,
+    IN p_is_transactional BOOLEAN
+)
+BEGIN
+    INSERT INTO sms_events (event_type, sender, message, timestamp, is_transactional)
+    VALUES (p_event_type, p_sender, p_message, p_timestamp, p_is_transactional);
+END //
+
+DELIMITER ;
+
+select * from sms_events;
+
+CREATE TABLE call_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    event_type VARCHAR(50),          -- e.g., "call"
+    call_type varchar(50),
+    phone_number VARCHAR(20),
+    duration INT,                    -- duration in seconds
+    timestamp DATETIME,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+DELIMITER //
+CREATE PROCEDURE sp_insert_call_log (
+    IN p_event_type VARCHAR(50),
+    IN p_call_type ENUM('incoming', 'outgoing','rejected','missed','blocked','unknown'),
+    IN p_phone_number VARCHAR(20),
+    IN p_duration INT,
+    IN p_timestamp DATETIME
+)
+BEGIN
+    INSERT INTO call_logs (
+        event_type, call_type, phone_number, duration, timestamp
+    ) VALUES (
+        p_event_type, p_call_type, p_phone_number, p_duration, p_timestamp
+    );
+END;
+//
+DELIMITER ;
+
+select * from  call_logs;
